@@ -1,0 +1,77 @@
+<p-message
+  *ngIf="message"
+  [severity]="message.severity"
+  [text]="message.text"
+  styleClass="w-full"
+></p-message>
+<form [formGroup]="form" (ngSubmit)="login()">
+  <div class="field mt-3">
+    <label for="email" class="block">{{ 'form.email' | translate }}</label>
+    <input
+      type="text"
+      id="email"
+      name="email"
+      autocomplete="email"
+      class="w-full"
+      aria-describedby="email-error"
+      formControlName="email"
+      pInputText
+    />
+    <small
+      id="email-error"
+      class="p-error block"
+      *ngIf="
+        form.get('email')?.touched && form.get('email')?.hasError('required')
+      "
+    >
+      {{
+        'message.error.required'
+          | translate: { field: 'form.email' | translate }
+      }}
+    </small>
+    <small
+      id="email-error"
+      class="p-error block"
+      *ngIf="form.get('email')?.touched && form.get('email')?.hasError('email')"
+    >
+      {{
+        'message.error.valid' | translate: { field: 'form.email' | translate }
+      }}
+    </small>
+  </div>
+  <div class="field mt-5">
+    <label for="password" class="block">{{
+      'form.password' | translate
+    }}</label>
+    <input
+      type="password"
+      id="password"
+      name="email"
+      autocomplete="current-password"
+      class="w-full"
+      aria-describedby="password-error"
+      formControlName="password"
+      pInputText
+    />
+    <small
+      id="password-error"
+      class="p-error block"
+      *ngIf="
+        form.get('password')?.touched &&
+        form.get('password')?.hasError('required')
+      "
+    >
+      {{
+        'message.error.required'
+          | translate: { field: 'form.password' | translate }
+      }}
+    </small>
+  </div>
+  <button
+    type="submit"
+    pButton
+    label="{{ 'form.submit' | translate }}"
+    class="mt-8 w-full"
+    [disabled]="form.invalid"
+  ></button>
+</form>

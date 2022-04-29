@@ -1,0 +1,318 @@
+<p-toast></p-toast>
+<div class="md:flex justify-content-between" style="gap: 4rem">
+  <form [formGroup]="form" (ngSubmit)="orderDelivery()" class="flex-1">
+    <h2>{{ 'delivery.sender' | translate }}</h2>
+    <div formGroupName="sender">
+      <div class="field">
+        <label for="sender-name" class="block">{{
+          'form.name' | translate
+        }}</label>
+        <input
+          type="text"
+          id="sender-name"
+          name="sender-name"
+          class="w-full"
+          aria-describedby="sender-name-error"
+          formControlName="name"
+          pInputText
+        />
+        <small
+          id="sender-name-error"
+          class="p-error block"
+          *ngIf="
+            form.get('sender')?.get('name')?.touched &&
+            form.get('sender')?.get('name')?.hasError('required')
+          "
+        >
+          {{
+            'message.error.required'
+              | translate: { field: 'form.name' | translate }
+          }}
+        </small>
+      </div>
+      <div class="field">
+        <label for="sender-phone" class="block">{{
+          'form.phone' | translate
+        }}</label>
+        <input
+          type="text"
+          id="sender-phone"
+          name="sender-phone"
+          class="w-full"
+          aria-describedby="sender-phone-error"
+          formControlName="phone"
+          pInputText
+        />
+        <small
+          id="sender-phone-error"
+          class="p-error block"
+          *ngIf="
+            form.get('sender')?.get('phone')?.touched &&
+            form.get('sender')?.get('phone')?.hasError('required')
+          "
+        >
+          {{
+            'message.error.required'
+              | translate: { field: 'form.phone' | translate }
+          }}
+        </small>
+        <small
+          id="sender-phone-error"
+          class="p-error block"
+          *ngIf="
+            form.get('sender')?.get('phone')?.touched &&
+            form.get('sender')?.get('phone')?.hasError('validPhone')
+          "
+        >
+          {{
+            'message.error.valid'
+              | translate: { field: 'form.phone' | translate }
+          }}
+        </small>
+      </div>
+      <div class="field">
+        <label for="sender-address" class="block">{{
+          'form.address' | translate
+        }}</label>
+        <p-autoComplete
+          id="sender-address"
+          name="sender-address"
+          class="w-full"
+          aria-describedby="sender-address-error"
+          formControlName="address"
+          [suggestions]="senderAddressSuggestions"
+          [forceSelection]="true"
+          field="description"
+          (completeMethod)="searchForSender($event)"
+        ></p-autoComplete>
+        <small
+          id="sender-address-error"
+          class="p-error block"
+          *ngIf="
+            form.get('sender')?.get('address')?.touched &&
+            form.get('sender')?.get('address')?.hasError('required')
+          "
+        >
+          {{
+            'message.error.required'
+              | translate: { field: 'form.address' | translate }
+          }}
+        </small>
+      </div>
+      <div class="field">
+        <label for="sender-city" class="block">{{
+          'form.city' | translate
+        }}</label>
+        <p-dropdown
+          [options]="(cities$ | async)!"
+          id="sender-city"
+          formControlName="city"
+          aria-describedby="sender-city-error"
+          [optionLabel]="language + 'Name'"
+        ></p-dropdown>
+        <small
+          id="sender-city-error"
+          class="p-error block"
+          *ngIf="
+            form.get('sender')?.get('city')?.touched &&
+            form.get('sender')?.get('city')?.hasError('required')
+          "
+        >
+          {{
+            'message.error.required'
+              | translate: { field: 'form.city' | translate }
+          }}
+        </small>
+      </div>
+    </div>
+    <h2 class="mt-6">{{ 'delivery.receiver' | translate }}</h2>
+    <div formGroupName="receiver">
+      <div class="field">
+        <label for="receiver-name" class="block">{{
+          'form.name' | translate
+        }}</label>
+        <input
+          type="text"
+          id="receiver-name"
+          name="receiver-name"
+          class="w-full"
+          aria-describedby="receiver-name-error"
+          formControlName="name"
+          pInputText
+        />
+        <small
+          id="receiver-name-error"
+          class="p-error block"
+          *ngIf="
+            form.get('receiver')?.get('name')?.touched &&
+            form.get('receiver')?.get('name')?.hasError('required')
+          "
+        >
+          {{
+            'message.error.required'
+              | translate: { field: 'form.name' | translate }
+          }}
+        </small>
+      </div>
+      <div class="field">
+        <label for="receiver-phone" class="block">{{
+          'form.phone' | translate
+        }}</label>
+        <input
+          type="text"
+          id="receiver-phone"
+          name="receiver-phone"
+          class="w-full"
+          aria-describedby="receiver-phone-error"
+          formControlName="phone"
+          pInputText
+        />
+        <small
+          id="receiver-phone-error"
+          class="p-error block"
+          *ngIf="
+            form.get('receiver')?.get('phone')?.touched &&
+            form.get('receiver')?.get('phone')?.hasError('required')
+          "
+        >
+          {{
+            'message.error.required'
+              | translate: { field: 'form.phone' | translate }
+          }}
+        </small>
+        <small
+          id="receiver-phone-error"
+          class="p-error block"
+          *ngIf="
+            form.get('receiver')?.get('phone')?.touched &&
+            form.get('receiver')?.get('phone')?.hasError('validPhone')
+          "
+        >
+          {{
+            'message.error.required'
+              | translate: { field: 'form.phone' | translate }
+          }}
+        </small>
+      </div>
+      <div class="field">
+        <label for="receiver-address" class="block">{{
+          'form.address' | translate
+        }}</label>
+        <p-autoComplete
+          id="receiver-address"
+          name="receiver-address"
+          class="w-full"
+          aria-describedby="receiver-address-error"
+          formControlName="address"
+          [suggestions]="receiverAddressSuggestions"
+          [forceSelection]="true"
+          field="description"
+          (completeMethod)="searchForReceiver($event)"
+        ></p-autoComplete>
+        <small
+          id="receiver-address-error"
+          class="p-error block"
+          *ngIf="
+            form.get('receiver')?.get('address')?.touched &&
+            form.get('receiver')?.get('address')?.hasError('required')
+          "
+        >
+          {{
+            'message.error.required'
+              | translate: { field: 'form.address' | translate }
+          }}
+        </small>
+      </div>
+      <div class="field">
+        <label for="receiver-city" class="block">{{
+          'form.city' | translate
+        }}</label>
+        <p-dropdown
+          [options]="(cities$ | async)!"
+          id="receiver-city"
+          formControlName="city"
+          aria-describedby="receiver-city-error"
+          [optionLabel]="language + 'Name'"
+        ></p-dropdown>
+        <small
+          id="receiver-city-error"
+          class="p-error block"
+          *ngIf="
+            form.get('receiver')?.get('city')?.touched &&
+            form.get('receiver')?.get('city')?.hasError('required')
+          "
+        >
+          {{
+            'message.error.required'
+              | translate: { field: 'form.city' | translate }
+          }}
+        </small>
+      </div>
+    </div>
+    <h2 class="mt-6">{{ 'form.date' | translate }}</h2>
+    <div class="field">
+      <label for="date" class="block">{{ 'form.date' | translate }}</label>
+      <p-calendar
+        id="date"
+        formControlName="date"
+        dateFormat="dd/mm/yy"
+        aria-describedby="date-error"
+        [touchUI]="true"
+        [readonlyInput]="true"
+      ></p-calendar>
+      <small
+        id="date-error"
+        class="p-error block"
+        *ngIf="
+          form.get('time')?.touched && form.get('time')?.hasError('required')
+        "
+      >
+        {{
+          'message.error.required'
+            | translate: { field: 'form.date' | translate }
+        }}
+      </small>
+    </div>
+    <div class="field">
+      <label for="time" class="block">{{ 'form.time' | translate }}</label>
+      <p-dropdown
+        *ngIf="times$ | async as times"
+        [options]="times"
+        id="time"
+        formControlName="time"
+        aria-describedby="time-error"
+        optionLabel="label"
+        optionValue="value"
+      ></p-dropdown>
+      <small
+        id="time-error"
+        class="p-error block"
+        *ngIf="
+          form.get('time')?.touched && form.get('time')?.hasError('required')
+        "
+      >
+        {{
+          'message.error.required'
+            | translate: { field: 'form.time' | translate }
+        }}
+      </small>
+    </div>
+    <button
+      type="submit"
+      pButton
+      label="{{ 'form.submit' | translate }}"
+      [disabled]="form.invalid"
+      class="mt-6"
+    ></button>
+  </form>
+  <div class="flex-1 mt-6 md:mt-0">
+    <h2>{{ 'delivery.path' | translate }}</h2>
+    <app-delivery-map
+      *ngIf="mapInit"
+      [senderAddress]="form.value.sender.address"
+      [receiverAddress]="form.value.receiver.address"
+    ></app-delivery-map>
+    <h2>{{ 'delivery.price' | translate }}</h2>
+    <app-delivery-table [cities]="cities" *ngIf="cities"></app-delivery-table>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<table class="table" *ngIf="data">
+  <tr>
+    <td class="table__cell">{{ 'delivery.price' | translate }}</td>
+    <td class="table__cell">₪{{ data.price }}</td>
+  </tr>
+  <tr>
+    <td class="table__cell">{{ 'delivery.vat' | translate }}</td>
+    <td class="table__cell">₪{{ data.vat }}</td>
+  </tr>
+  <tr>
+    <td class="table__cell">
+      <strong>{{ 'delivery.total' | translate | uppercase }}</strong>
+    </td>
+    <td class="table__cell">
+      <strong>₪{{ data.price + data.vat }}</strong>
+    </td>
+  </tr>
+</table>
